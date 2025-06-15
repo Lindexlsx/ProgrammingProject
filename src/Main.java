@@ -1,57 +1,52 @@
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.sun.source.doctree.SystemPropertyTree;
-import model.ConstructionProduct;
-import service.EnvironmentalImpactCalculator;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         try {
-            Connection conn = DatabaseConnector.getConnection();
+            String[] layers = {"Roof deck", "Thermal insulation", "Waterproofing membrane"};
 
-            Map<String, Double> thicknesses = new HashMap<>();
-            thicknesses.put("Concrete C25/30", 0.30);
-            thicknesses.put("Polyurethane Rigid Foam", 0.10);
-            thicknesses.put("Polymer modified bitumen (PMB)", 0.008);
+            List<AppliedLayer> appliedLayers = new ArrayList<>();
+            double totalImpact = 0;
 
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM construction_product");
+            for (String layer : layers) {
+                List<ConstructionProduct> options = ProductRepository.getProductsByLayer(layer);
 
-            List<ConstructionProduct> composition = new ArrayList<>();
-
-            while (rs.next()) {
-                String name = rs.getString("name");
-                double massDensity = rs.getDouble("mass_density");
-                double environmentalImpact = rs.getDouble("environmental_impact");
-
-                if (thicknesses.containsKey(name)) {
-                    double thickness = thicknesses.get(name);
-                    ConstructionProduct product = new ConstructionProduct(name, massDensity, environmentalImpact, thickness);
-                    // System.out.println(product.toString());
-                    composition.add(product);
+                // Toon beschikbare materialen
+                System.out.println("\nAvailable materials for " + layer + ":");
+                for (int i = 0; i < options.size(); i++) {
+                    System.out.printf("%d. %s%n", i + 1, options.get(i).getName());
                 }
-            }
 
-            double totalImpact = 5;
-            for (ConstructionProduct product : composition) {
-                double impact = EnvironmentalImpactCalculator.calculateImpact(product, product.getThickness());
-                System.out.printf("Layer: %s (%.3f m) → %.2f kg CO₂-eq/m²%n", product.getName(), product.getThickness(), impact);
+                // Vraag materiaalkeuze
+                System.out.print("Enter the number of the product you want to select: ");
+                int selectedIndex = Integer.parseInt(scanner.nextLine()) - 1;
+                ConstructionProduct selectedProduct = options.get(selectedIndex);
+
+                // Vraag dikte
+                System.out.print("Enter the thickness in meters (e.g. 0.2 for 20 cm): ");
+                double thickness = Double.parseDouble(scanner.nextLine());
+
+                // Verwerking
+                AppliedLayer applied = new AppliedLayer(selectedProduct, thickness);
+                double impact = EnvironmentalImpactCalculator.calculateImpact(selectedProduct, thickness);
+
+                appliedLayers.add(applied);
                 totalImpact += impact;
+
+                System.out.printf("Selected %s for %s (%.3f m) → %.2f kg CO₂-eq/m²%n",
+                        selectedProduct.getName(), layer, thickness, impact);
             }
 
-            System.out.printf("Total environmental impact of roof composition: %.2f kg CO₂-eq/m²%n", totalImpact);
 
-            conn.close();
+            RoofProject project = new RoofProject("Warm Roof Project A", appliedLayers, totalImpact);
+            System.out.printf("Total environmental impact of %s: %.2f kg CO₂-eq/m²%n",
+                    project.getProjectName(), project.getTotalImpact());
 
         } catch (Exception e) {
-            System.out.println("Connection error:");
+            System.out.println("General error:");
             e.printStackTrace();
         }
     }
