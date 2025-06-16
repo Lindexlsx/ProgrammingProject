@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 15, 2025 at 03:32 PM
+-- Generation Time: Jun 16, 2025 at 10:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,7 +35,7 @@ CREATE TABLE `construction_product` (
   `functional_unit` enum('m','m2','m3','kg') NOT NULL COMMENT 'm, m2, m3, kg, ...',
   `environmental_impact` float NOT NULL COMMENT 'kg CO2-eq/functional_unit',
   `unit_price` float DEFAULT NULL COMMENT 'optional',
-  `image` varchar(255) NOT NULL COMMENT 'pad of URL'
+  `image` varchar(255) DEFAULT NULL COMMENT 'pad of URL'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -96,7 +96,29 @@ INSERT INTO `construction_product` (`id`, `name`, `layer`, `mass_density`, `func
 (165, 'Water proofing sheet | Polymer bitumen (7 mm) | Loose laid | To be ballasted', 'Waterproofing membrane', 0, 'm2', 10, 0, ''),
 (166, 'Proofing sheet | EPDM (1.2 mm) | Loose laid | To be ballasted', 'Waterproofing membrane', 0, 'm2', 2, 0, ''),
 (167, 'Gypsum plasterboard (15 mm)', 'Interior finish', 0, 'm2', 4, 0, ''),
-(168, 'Gypsum plaster (15 mm)', 'Interior finish', 0, 'm2', 4, 0, '');
+(168, 'Gypsum plaster (15 mm)', 'Interior finish', 0, 'm2', 4, 0, ''),
+(169, 'Uncoated cellular insulation material', 'Thermal insulation', 95, 'kg', 1.62285, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roof_project`
+--
+
+CREATE TABLE `roof_project` (
+  `id` int(11) NOT NULL,
+  `project_name` varchar(100) NOT NULL,
+  `total_impact` float NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `roof_project`
+--
+
+INSERT INTO `roof_project` (`id`, `project_name`, `total_impact`, `created_at`) VALUES
+(1, 'Beton + PUR + bitumen', 187.1, '2025-06-16 07:35:57'),
+(2, 'Gerecycleerd beton + EPS + bitumen', 136.35, '2025-06-16 08:02:53');
 
 --
 -- Indexes for dumped tables
@@ -109,6 +131,12 @@ ALTER TABLE `construction_product`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `roof_project`
+--
+ALTER TABLE `roof_project`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -116,7 +144,13 @@ ALTER TABLE `construction_product`
 -- AUTO_INCREMENT for table `construction_product`
 --
 ALTER TABLE `construction_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key', AUTO_INCREMENT=169;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'primary key', AUTO_INCREMENT=170;
+
+--
+-- AUTO_INCREMENT for table `roof_project`
+--
+ALTER TABLE `roof_project`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
