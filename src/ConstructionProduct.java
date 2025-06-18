@@ -4,8 +4,6 @@ public class ConstructionProduct {
     private double massDensity;
     private String functionalUnit;
     private double environmentalImpact;
-
-
     public ConstructionProduct(String name, double massDensity, String functionalUnit, double environmentalImpact) {
         this.name = name;
         this.functionalUnit = functionalUnit;

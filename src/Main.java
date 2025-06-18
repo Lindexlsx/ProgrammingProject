@@ -5,11 +5,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welkom bij de applicatie. Maak een keuze:");
-        System.out.println("1. Nieuw project");
-        System.out.println("2. Bestaand project");
-        System.out.println("3. Databank materialen");
-        System.out.print("Voer het nummer van je keuze in: ");
+        System.out.println("Welcome to the application. Make your choice:");
+        System.out.println("1. New project");
+        System.out.println("2. Existing project");
+        System.out.println("3. Database materials");
+        System.out.print("Insert the number of your choice: ");
 
         String choice = scanner.nextLine();
 
@@ -27,7 +27,7 @@ public class Main {
                 break;
 
             default:
-                System.out.println("Ongeldige keuze. Programma wordt afgesloten.");
+                System.out.println("Invalid choice. Shutdown of application.");
         }
     }
 
@@ -68,12 +68,12 @@ public class Main {
                         selectedProduct.getName(), layer, thickness, impact);
             }
 
-            System.out.print("\nGeef een naam voor het project (max 100 tekens): ");
+            System.out.print("\nInsert a name for the project (max 100 characters): ");
             String projectName = scanner.nextLine().trim();
 
             // Validatie
             while (projectName.isEmpty() || projectName.length() > 100) {
-                System.out.println("Ongeldige naam. Probeer opnieuw (max 100 tekens, niet leeg): ");
+                System.out.println("Invalid name. Try again (max 100 characters, not empty): ");
                 projectName = scanner.nextLine().trim();
             }
 
@@ -85,8 +85,11 @@ public class Main {
             // Opslaan in DB
             project.saveToDatabase();
 
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Invalid input: " + iae.getMessage());
+            System.out.println("Please make sure to select a valid unit (m2, m3, kg).");
         } catch (Exception e) {
-            System.out.println("General error:");
+            System.out.println("An unexpected error occurred:");
             e.printStackTrace();
         }
     }
@@ -150,9 +153,9 @@ public class Main {
     }
 
     private static void runMaterialDatabase(Scanner scanner) {
-        System.out.println("\nMateriaalbeheer:");
-        System.out.println("1. Nieuw materiaal toevoegen");
-        System.out.print("Maak een keuze: ");
+        System.out.println("\nMaterial Database Menu:");
+        System.out.println("1. Add a new material");
+        System.out.print("Make your choice: ");
         String materialChoice = scanner.nextLine();
 
         switch (materialChoice) {
@@ -160,7 +163,7 @@ public class Main {
                 MaterialInput.addMaterialFromInput(scanner);
                 break;
             default:
-                System.out.println("Ongeldige keuze.");
+                System.out.println("Invalid choice.");
         }
     }
 }
