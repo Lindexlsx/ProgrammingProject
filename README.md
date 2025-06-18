@@ -1,19 +1,20 @@
-Voeg in je github repository een readme file toe met een overzicht van je gebruikte libraries.
-Maak je gebruik van externe tools zoals bv. Figma of Trello plaats je ook in je readme file links hiernaar zodat alles duidelijk op dezelfde plaats staat.
-
 # 🌱 Environmental Impact Calculator for Flat Roofs
 
-A Java application that calculates the environmental impact (Global Warming Potential - GWP) of flat roof compositions, with a focus on circular construction principles. The app connects to a MySQL database to retrieve material data.
+A Java application that calculates the environmental impact (Global Warming Potential - GWP) of flat roof compositions, focused on learning how to build applications in a school context.
 
 ---
 
 ## 💡 Project Description
 
-This application allows users to:
-- Retrieve construction product data from a MySQL database
-- Simulate roof build-ups by selecting layers and assigning thicknesses
-- Automatically calculate the environmental impact per m²
-- Prepare for comparison between alternative material compositions
+This educational project simulates the creation and environmental assessment of flat roof constructions. The following core functionalities are included:
+
+- **Database of building material environmental data**
+- **Add custom materials with environmental values**
+- **Create and edit flat roof compositions**
+- **Calculate total environmental impact per m²**
+- **Display and compare environmental results**
+
+> ⚠️ **Note**: This application is built for educational purposes and is **not suitable** for scientific or engineering-grade environmental calculations. Data and formulas are simplified to support learning objectives, not real-world precision.
 
 ---
 
@@ -27,54 +28,61 @@ This application allows users to:
 
 ## 📚 Libraries Used
 
-- [MySQL Connector/J](https://dev.mysql.com/downloads/connector/j/)
-  - JDBC driver to enable Java–MySQL communication
-  - Required to connect to your MySQL database from the Java application
+The project uses standard Java SE and JDBC:
+
+- **Java SE (Standard Edition)**: No external frameworks or dependencies
+- **MySQL JDBC Driver**  
+  Enables database connectivity from Java to a local MySQL database  
+  🔗 https://dev.mysql.com/downloads/connector/j/
 
 ---
 
 ## 🛠️ External Tools
 
-| Tool    | Description                            | Link                                |
-|---------|----------------------------------------|-------------------------------------|
-| Figma   | For UI wireframes or early designs     | *Insert your Figma link here*       |
-| Trello  | Project planning and task management   | *Insert your Trello board link here* |
+❌ **No external design or planning tools** (e.g., Figma, Trello, etc.) were used during development.
 
 ---
 
 ## 🗃️ Database
 
-The application connects to a database named `environmental_impact`, which contains a table `construction_product` with the following fields:
+The application connects to a MySQL database `environmental_impact` containing:
 
-- `id` *(AUTO_INCREMENT primary key)*
-- `name`
-- `layer`
-- `functional_unit` (`ENUM`: 'm', 'm2', 'm3', 'kg')
-- `mass_density` *(kg/m³)*
-- `environmental_impact` *(kg CO₂-eq/kg)*
-- `unit_price` *(optional)*
-- `image` *(optional, URL or filepath)*
+### `construction_product`
+| Field               | Type         | Description                                      |
+|---------------------|--------------|--------------------------------------------------|
+| `id`                | INT          | Auto-increment primary key                      |
+| `name`              | VARCHAR(255) | Name of the material                            |
+| `layer`             | VARCHAR(100) | Layer type (e.g. Roof deck, Thermal insulation) |
+| `functional_unit`   | ENUM         | 'm', 'm2', 'm3', 'kg'                            |
+| `mass_density`      | DOUBLE       | Required only for 'kg'                          |
+| `environmental_impact` | DOUBLE   | CO₂ impact per functional unit (kg CO₂-eq)      |
+| `unit_price`        | DOUBLE (nullable) | Optional material cost per unit           |
+| `image`             | TEXT (nullable) | Path or URL to an image                    |
 
----
-
-## 🚀 How to Run
-
-1. Start MySQL via XAMPP
-2. Open IntelliJ and run `Main.java`
-3. Ensure your JDBC driver is included in the project libraries
-4. Results are printed to the console based on database input
-
----
-
-## 📝 To Do
-
-- [ ] Add export to PDF or Excel
-- [ ] Extend with UI (JavaFX or web)
-- [ ] Add material compatibility checker
+### `roof_project`
+| Field               | Type         | Description                      |
+|---------------------|--------------|----------------------------------|
+| `id`                | INT          | Auto-increment primary key      |
+| `project_name`      | VARCHAR(100) | Name of the roof project        |
+| `total_impact`      | DOUBLE       | Total GWP per m²                |
 
 ---
 
-## 📬 Contact
+## 📊 Data Source
 
-Created by [Your Name]  
-*To be used in the context of the Programming Project (Applied Bachelor in Computer Science).*
+The emission factors used in the application are based on CO₂ datasets published by **Buildwise** and are publicly available at:
+
+🔗 https://www.buildwise.be/nl/themas/duurzaam-bouwen/milieuvriendelijk-bouwen/de-bouwwerf-en-het-bedrijfsbeheer-optimaliseren/scope-3-berekeningen/
+
+---
+
+## 🤖 AI Support
+
+Parts of the code, structure, and documentation were developed with the help of **ChatGPT (OpenAI)**. ChatGPT was used to:
+- Translate functional needs into Java code
+- Handle database integration (JDBC)
+- Suggest object-oriented design patterns
+- Explain errors and refine existing code
+- Draft documentation (such as this README)
+
+All AI-suggested code was manually reviewed, tested, and integrated into the final application.
